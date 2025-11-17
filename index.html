@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>FlyLoop – Weekly Travel Subscription</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="FlyLoop is a travel subscription that turns weekly trips into one simple monthly payment." />
+
+  <style>
+    :root {
+      --primary: #1f6fb8;      /* main blue */
+      --primary-soft: #5f95c7; /* soft blue */
+      --bg: #f6f3ec;           /* warm off-white */
+      --accent: #e8d7b8;       /* beige */
+      --dark: #26313a;         /* charcoal */
+      --text: #28323a;
+      --muted: #6b737b;
+      --radius-lg: 18px;
+      --shadow-soft: 0 18px 40px rgba(0, 0, 0, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+                   "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    /* Layout helpers */
+    .container {
+      width: min(1120px, 92%);
+      margin: 0 auto;
+    }
+
+    section {
+      padding: 80px 0;
+    }
+
+    h1, h2, h3 {
+      color: var(--dark);
+      letter-spacing: -0.03em;
+    }
+
+    h1 { font-size: clamp(2.6rem, 4vw, 3.4rem); }
+    h2 { font-size: clamp(2rem, 3vw, 2.4rem); margin-bottom: 1.5rem; }
+    h3 { font-size: 1.3rem; margin-bottom: 0.6rem; }
+
+    p { color: var(--muted); }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(31, 111, 184, 0.08);
+      color: var(--primary);
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      background: rgba(0,0,0,0.04);
+      color: var(--muted);
+    }
+
+    .btn-primary,
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 22px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: transform 0.12s ease, box-shadow 0.12s ease,
+                  background 0.12s ease, color 0.12s ease;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 14px 30px rgba(31, 111, 184, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 16px 40px rgba(31, 111, 184, 0.35);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--primary);
+      border: 1px solid rgba(31, 111, 184, 0.4);
+    }
+
+    .btn-outline:hover {
+      background: rgba(31, 111, 184, 0.06);
+      transform: translateY(-1px);
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    /* Navbar */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      backdrop-filter: blur(14px);
+      background: rgba(246, 243, 236, 0.9);
+      border-bottom: 1px solid rgba(0,0,0,0.03);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-left img {
+      width: 32px;
+      height: 32px;
+    }
+
+    .nav-title {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.1;
+    }
+
+    .nav-title span:first-child {
+      font-weight: 700;
+      font-size: 1.05rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--primary);
+    }
+
+    .nav-title span:last-child {
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      font-size: 0.9rem;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary);
+    }
+
+    .nav-cta {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .nav-toggle {
+      display: none;
+      cursor: pointer;
+      border: none;
+      background: none;
+    }
+
+    .nav-toggle span {
+      display: block;
+      width: 20px;
+      height: 2px;
+      background: var(--dark);
+      margin: 4px 0;
+      border-radius: 999px;
+    }
+
+    /* Hero */
+    #hero {
+      padding-top: 40px;
+      padding-bottom: 80px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+      gap: 40px;
+      align-items: center;
+    }
+
+    .hero-kicker {
+      margin-bottom: 16px;
+    }
+
+    .hero-title {
+      margin-bottom: 12px;
+    }
+
+    .hero-sub {
+      font-size: 1rem;
+      margin-bottom: 24px;
+      max-width: 440px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .hero-meta {
+      font-size: 0.8rem;
+      color: var(--muted);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .hero-meta span {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .hero-image-card {
+      border-radius: 28px;
+      overflow: hidden;
+      background: linear-gradient(135deg, #1f6fb8, #5f95c7);
+      color: white;
+      padding: 18px;
+      box-shadow: var(--shadow-soft);
+      position: relative;
+      min-height: 260px;
+    }
+
+    .hero-image-card h3 {
+      color: white;
+      font-size: 1.3rem;
+      margin-bottom: 4px;
+    }
+
+    .hero-image-card p {
+      color: rgba(255,255,255,0.86);
+      font-size: 0.9rem;
+      max-width: 260px;
+    }
+
+    .hero-chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 12px;
+    }
+
+    .hero-chip {
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.16);
+      font-size: 0.75rem;
+    }
+
+    .hero-plane {
+      position: absolute;
+      right: 18px;
+      bottom: 22px;
+      width: 120px;
+      height: 120px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 20%, #fefefe, #a9c6e3);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.2rem;
+    }
+
+    .hero-tagcard {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: rgba(246,243,236,0.96);
+      color: var(--text);
+      border-radius: 16px;
+      padding: 10px 12px;
+      font-size: 0.8rem;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.18);
+    }
+
+    .hero-tagcard strong {
+      display: block;
+      font-size: 0.9rem;
+    }
+
+    /* Two-column generic layout */
+    .two-col {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: 40px;
+      align-items: start;
+    }
+
+    .two-col > div p + p {
+      margin-top: 10px;
+    }
+
+    /* Cards */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      margin-top: 24px;
+    }
+
+    .card {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 18px 18px 20px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .card h3 {
+      margin-bottom: 6px;
+    }
+
+    .card p {
+      font-size: 0.9rem;
+    }
+
+    /* Pricing */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 24px;
+      margin-top: 26px;
+    }
+
+    .pricing-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 22px 20px 22px;
+      box-shadow: var(--shadow-soft);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .pricing-card.popular {
+      border: 2px solid var(--primary);
+      transform: translateY(-4px);
+    }
+
+    .pricing-pill {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--primary);
+    }
+
+    .price {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--dark);
+    }
+
+    .price span {
+      font-size: 0.85rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .pricing-list {
+      list-style: none;
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    .pricing-list li {
+      margin-bottom: 6px;
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+
+    .pricing-list li::before {
+      content: "•";
+      color: var(--primary);
+      font-weight: 700;
+      margin-top: 1px;
+    }
+
+    .pricing-footnote {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    .pricing-card .btn-primary,
+    .pricing-card .btn-outline {
+      width: 100%;
+      margin-top: 4px;
+    }
+
+    /* Destinations */
+    .dest-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 18px;
+      margin-top: 18px;
+    }
+
+    .dest-card {
+      background: white;
+      border-radius: 16px;
+      padding: 14px 14px 16px;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.06);
+      font-size: 0.88rem;
+    }
+
+    .dest-title {
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .dest-sub {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .chip {
+      font-size: 0.75rem;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(31,111,184,0.08);
+      color: var(--primary);
+    }
+
+    /* FAQ */
+    .faq-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+      gap: 30px;
+      align-items: flex-start;
+    }
+
+    .faq-item {
+      background: white;
+      border-radius: 14px;
+      padding: 14px 16px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.04);
+      margin-bottom: 10px;
+    }
+
+    .faq-q {
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 4px;
+      color: var(--dark);
+    }
+
+    .faq-a {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    /* Contact */
+    .contact-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 20px 20px 22px;
+      box-shadow: var(--shadow-soft);
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    .contact-info {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+      font-size: 0.9rem;
+    }
+
+    .contact-info div span {
+      display: block;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .contact-info div strong {
+      color: var(--dark);
+    }
+
+    .contact-note {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 10px;
+    }
+
+    /* Footer */
+    footer {
+      padding: 30px 0 24px;
+      font-size: 0.8rem;
+      color: var(--muted);
+      border-top: 1px solid rgba(0,0,0,0.04);
+      margin-top: 40px;
+    }
+
+    .footer-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 14px;
+    }
+
+    .footer-links a {
+      color: var(--muted);
+    }
+
+    .footer-links a:hover {
+      color: var(--primary);
+    }
+
+    /* Responsive */
+    @media (max-width: 860px) {
+      .hero-grid,
+      .two-col,
+      .faq-grid {
+        grid-template-columns: minmax(0,1fr);
+      }
+
+      .hero-image-card {
+        order: -1;
+      }
+    }
+
+    @media (max-width: 720px) {
+      header {
+        backdrop-filter: blur(12px);
+      }
+
+      .nav-links {
+        position: absolute;
+        inset: calc(54px + 6px) 0 auto 0;
+        background: rgba(246,243,236,0.98);
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 14px 4%;
+        border-bottom: 1px solid rgba(0,0,0,0.04);
+        transform-origin: top;
+        transform: scaleY(0);
+        opacity: 0;
+        pointer-events: none;
+        transition: transform 0.16s ease, opacity 0.16s ease;
+      }
+
+      .nav-links.open {
+        transform: scaleY(1);
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .nav-cta {
+        display: none;
+      }
+
+      .nav-toggle {
+        display: block;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- NAVBAR -->
+  <header>
+    <div class="container nav">
+      <div class="nav-left">
+        <!-- Replace logo.png with your logo file -->
+        <img src="logo.png" alt="FlyLoop logo" />
+        <div class="nav-title">
+          <span>FLYLOOP</span>
+          <span>Weekly travel, one monthly payment</span>
+        </div>
+      </div>
+
+      <nav class="nav-links" id="navLinks">
+        <a href="#how">How it works</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#destinations">Destinations</a>
+        <a href="#faq">FAQ</a>
+        <a href="#contact">Contact</a>
+      </nav>
+
+      <div class="nav-cta">
+        <a href="#pricing" class="btn-outline">View plans</a>
+        <a href="#contact" class="btn-primary">Join waitlist</a>
+      </div>
+
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="container hero-grid">
+      <div>
+        <div class="hero-kicker">
+          <span class="badge">New • Travel Subscription</span>
+        </div>
+        <h1 class="hero-title">Travel every month.<br />Pay one simple subscription.</h1>
+        <p class="hero-sub">
+          FlyLoop turns weekend getaways into a habit. Pay a flat monthly fee
+          and receive curated flight&nbsp;+&nbsp;stay packages to handpicked destinations.
+        </p>
+
+        <div class="hero-actions">
+          <a href="#pricing" class="btn-primary">Explore plans</a>
+          <a href="#how" class="btn-outline">See how it works</a>
+        </div>
+
+        <div class="hero-meta">
+          <span>✈️ Weekly-ready itineraries</span>
+          <span>🧳 Flights &amp; stays included</span>
+          <span>🌍 Built for students &amp; young pros</span>
+        </div>
+      </div>
+
+      <div class="hero-image-card">
+        <div class="hero-tagcard">
+          <strong>Toronto → Paris</strong>
+          Premium Loop • 4 nights
+        </div>
+        <h3>Make “Where next?” a monthly question.</h3>
+        <p>
+          Set your budget once. Every month, we unlock a new trip window with
+          flights, hotel, and smart suggestions for how to spend your time.
+        </p>
+        <div class="hero-chip-row">
+          <span class="hero-chip">Domestic hops</span>
+          <span class="hero-chip">Near-international</span>
+          <span class="hero-chip">Full itineraries</span>
+        </div>
+        <div class="hero-plane">✈️</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section id="how">
+    <div class="container two-col">
+      <div>
+        <h2>How FlyLoop works</h2>
+        <p>
+          Think of FlyLoop as your “set-and-forget” travel budget. Instead of
+          saving randomly and hunting for deals, your monthly subscription
+          earns you pre-planned trips you can actually take.
+        </p>
+        <p>
+          You choose your plan, pick a week, and we handle the flights,
+          hotels, and trip logistics with trusted partners.
+        </p>
+      </div>
+
+      <div>
+        <div class="card-grid">
+          <div class="card">
+            <h3>1. Choose your Loop</h3>
+            <p>
+              Start with Basic, Standard, or Premium depending on how often
+              and how far you want to travel.
+            </p>
+          </div>
+          <div class="card">
+            <h3>2. Pick your week</h3>
+            <p>
+              When your billing cycle renews, select the week you want to
+              travel. We release options that match your plan.
+            </p>
+          </div>
+          <div class="card">
+            <h3>3. Confirm your trip</h3>
+            <p>
+              Choose from curated flight&nbsp;+&nbsp;stay packages. All
+              options are pre-negotiated for FlyLoop members only.
+            </p>
+          </div>
+          <div class="card">
+            <h3>4. Show up &amp; go</h3>
+            <p>
+              You receive your full itinerary, check-in details, and local
+              recommendations in one place. Just pack and go.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VALUE / WHY SUBSCRIPTION -->
+  <section id="value">
+    <div class="container two-col">
+      <div>
+        <h2>Why a subscription instead of random deals?</h2>
+        <p>
+          Traditional travel is chaotic: prices jump, you forget to book, and
+          “maybe next month” turns into staying home. A subscription flips
+          that.
+        </p>
+        <p>
+          With FlyLoop, your trips are built into your life. You lock your
+          budget, we lock in the logistics.
+        </p>
+      </div>
+      <div class="card-grid">
+        <div class="card">
+          <h3>Predictable</h3>
+          <p>
+            One fixed monthly payment. No surprise surcharges or last-minute
+            shock fares.
+          </p>
+        </div>
+        <div class="card">
+          <h3>Frequent</h3>
+          <p>
+            Designed to be used. A plan that supports real, regular travel
+            instead of one big trip every few years.
+          </p>
+        </div>
+        <div class="card">
+          <h3>Negotiated rates</h3>
+          <p>
+            We bundle members to negotiate better prices with airlines and
+            hotels, then package those savings into your plan.
+          </p>
+        </div>
+        <div class="card">
+          <h3>Clear rules</h3>
+          <p>
+            Minimum terms and simple cancellation windows keep things fair for
+            both travelers and partners.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section id="pricing">
+    <div class="container">
+      <h2>Choose your FlyLoop plan</h2>
+      <p>
+        These plans are designed for demo/portfolio purposes. In a real
+        product, payment would be handled securely via Stripe, PayPal, or
+        another provider.
+      </p>
+
+      <div class="pricing-grid">
+        <!-- BASIC -->
+        <div class="pricing-card">
+          <div class="pricing-pill">Starter</div>
+          <h3>Basic Loop</h3>
+          <div class="price">$49 <span>/ month</span></div>
+          <ul class="pricing-list">
+            <li>One domestic trip credit every month</li>
+            <li>Economy flights included</li>
+            <li>2–3 night hotel stays</li>
+            <li>Fixed list of close destinations</li>
+            <li>Email support &amp; simple itineraries</li>
+          </ul>
+          <p class="pricing-footnote">Minimum commitment: 3 months</p>
+          <a href="#contact" class="btn-outline">Join Basic waitlist</a>
+        </div>
+
+        <!-- STANDARD -->
+        <div class="pricing-card popular">
+          <div class="pricing-pill">Most popular</div>
+          <h3>Standard Loop</h3>
+          <div class="price">$99 <span>/ month</span></div>
+          <ul class="pricing-list">
+            <li>Choose from 2 trip windows each month</li>
+            <li>Domestic or near-international options</li>
+            <li>3–4 nights in comfortable hotels</li>
+            <li>Flexible airline choices</li>
+            <li>Priority access to new destinations</li>
+          </ul>
+          <p class="pricing-footnote">Minimum commitment: 3 months</p>
+          <a href="#contact" class="btn-primary">Join Standard waitlist</a>
+        </div>
+
+        <!-- PREMIUM -->
+        <div class="pricing-card">
+          <div class="pricing-pill">For frequent explorers</div>
+          <h3>Premium Loop</h3>
+          <div class="price">$149 <span>/ month</span></div>
+          <ul class="pricing-list">
+            <li>Eligible to travel nearly every week</li>
+            <li>International destinations unlocked</li>
+            <li>Boutique &amp; design hotels</li>
+            <li>Upgraded flight options where available</li>
+            <li>Concierge-style chat support</li>
+          </ul>
+          <p class="pricing-footnote">Minimum commitment: 6 months</p>
+          <a href="#contact" class="btn-outline">Join Premium waitlist</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHAT YOU GET -->
+  <section id="included">
+    <div class="container two-col">
+      <div>
+        <h2>What’s included in each trip?</h2>
+        <p>
+          Every FlyLoop trip is a flight-plus-stay bundle with smart planning
+          baked in. You know where you’re going, where you’re sleeping, and
+          how to make the most of your limited days.
+        </p>
+      </div>
+      <div class="card-grid">
+        <div class="card">
+          <h3>✈️ Flights</h3>
+          <p>
+            Economy tickets included by default, with upgrade options in
+            Premium. All bookings are managed directly with our airline
+            partners.
+          </p>
+        </div>
+        <div class="card">
+          <h3>🏨 Accommodation</h3>
+          <p>
+            2–4 night stays depending on your plan. Safe, central areas with
+            good transit access and solid reviews.
+          </p>
+        </div>
+        <div class="card">
+          <h3>🧭 Itineraries</h3>
+          <p>
+            A simple, curated schedule: arrival, key neighborhoods, must-try
+            food, and optional activities.
+          </p>
+        </div>
+        <div class="card">
+          <h3>📞 Support</h3>
+          <p>
+            In a real product, we’d offer in-trip chat and emergency guidance.
+            For now, this site shows how that flow would look.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DESTINATIONS -->
+  <section id="destinations">
+    <div class="container">
+      <h2>Sample destinations by plan</h2>
+      <p>
+        These are example routes to demonstrate the concept. Real availability
+        would depend on launch city and airline partners.
+      </p>
+
+      <div class="dest-grid">
+        <div class="dest-card">
+          <div class="pill">Basic Loop</div>
+          <div class="dest-title">Toronto → Montréal</div>
+          <div class="dest-sub">3 days • Urban food &amp; art</div>
+          <p>
+            Quick hop with cafés, street murals and Old Port strolls. Perfect
+            for your first subscription trip.
+          </p>
+          <div class="chip-row">
+            <span class="chip">Short flight</span>
+            <span class="chip">Walkable city</span>
+          </div>
+        </div>
+
+        <div class="dest-card">
+          <div class="pill">Basic Loop</div>
+          <div class="dest-title">Vancouver → Victoria</div>
+          <div class="dest-sub">2–3 days • Coastal escape</div>
+          <p>
+            Ferry views, harbor walks, and tea rooms. Calm energy between
+            study or work weeks.
+          </p>
+          <div class="chip-row">
+            <span class="chip">Ferry + stay</span>
+            <span class="chip">Relaxed pace</span>
+          </div>
+        </div>
+
+        <div class="dest-card">
+          <div class="pill">Standard Loop</div>
+          <div class="dest-title">Toronto → New York City</div>
+          <div class="dest-sub">3–4 days • Big city hit</div>
+          <p>
+            A classic long weekend: museums, rooftop views, and late-night
+            slices a few hours from home.
+          </p>
+          <div class="chip-row">
+            <span class="chip">Near-international</span>
+            <span class="chip">Iconic sights</span>
+          </div>
+        </div>
+
+        <div class="dest-card">
+          <div class="pill">Standard Loop</div>
+          <div class="dest-title">Montréal → Chicago</div>
+          <div class="dest-sub">3 nights • Architecture &amp; music</div>
+          <p>
+            Skyline views, lake walks, and jazz clubs. A complete change of
+            scenery without crossing an ocean.
+          </p>
+          <div class="chip-row">
+            <span class="chip">Food scene</span>
+            <span class="chip">Art &amp; music</span>
+          </div>
+        </div>
+
+        <div class="dest-card">
+          <div class="pill">Premium Loop</div>
+          <div class="dest-title">Toronto → Paris</div>
+          <div class="dest-sub">4 nights • First big crossing</div>
+          <p>
+            Classic cafés, museums, and riverside walks. Premium adds boutique
+            hotels and more flight options.
+          </p>
+          <div class="chip-row">
+            <span class="chip">International</span>
+            <span class="chip">Boutique stay</span>
+          </div>
+        </div>
+
+        <div class="dest-card">
+          <div class="pill">Premium Loop</div>
+          <div class="dest-title">NYC → Tokyo</div>
+          <div class="dest-sub">5–6 nights • Long-haul dream</div>
+          <p>
+            Neon nights, temples, and ramen spots. A bucket-list trip, turned
+            into a subscription milestone.
+          </p>
+          <div class="chip-row">
+            <span class="chip">Long-haul</span>
+            <span class="chip">Culture overload</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ + POLICIES -->
+  <section id="faq">
+    <div class="container faq-grid">
+      <div>
+        <h2>FAQ &amp; cancellation basics</h2>
+        <p>
+          For your portfolio, this section shows investors or clients that
+          you’ve thought through terms, minimums, and edge cases.
+        </p>
+
+        <div class="card" style="margin-top:18px;">
+          <h3>Cancellation policy (concept)</h3>
+          <p style="font-size:0.9rem;">
+            • Basic &amp; Standard: 3-month minimum term<br />
+            • Premium: 6-month minimum term<br />
+            • After the minimum, cancellations apply to the next billing
+            cycle<br />
+            • Trip credits don’t roll over if you don’t travel<br />
+            • No refunds for traveler no-shows once tickets are issued<br />
+            • Full or partial refunds only if FlyLoop cancels or significantly
+            changes the destination
+          </p>
+        </div>
+      </div>
+
+      <div>
+        <div class="faq-item">
+          <div class="faq-q">Is this a real, active product?</div>
+          <div class="faq-a">
+            This website is designed as a demo/MVP concept. It can be used in
+            a portfolio, pitch deck, or prototype. Live payments and booking
+            logic are not connected yet.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q">Do travelers choose their destination?</div>
+          <div class="faq-a">
+            Yes. Each month, members receive a curated list of options that
+            match their plan level and departure city, then they pick.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q">How far in advance are itineraries sent?</div>
+          <div class="faq-a">
+            In the concept, itineraries are finalized 2–4 weeks before
+            departure, with all check-in details and recommendations in one
+            place.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q">Can members upgrade or downgrade?</div>
+          <div class="faq-a">
+            Upgrades are allowed anytime and affect the next cycle. Downgrades
+            apply only after the minimum commitment for the current plan.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q">Can friends travel together?</div>
+          <div class="faq-a">
+            Yes. The product concept supports add-on guests at a separate fee
+            so that couples or friends can share the same itinerary.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="container two-col">
+      <div>
+        <h2>About FlyLoop</h2>
+        <p>
+          FlyLoop exists to make travel feel normal, not like a once-every-few
+          years event. By switching from one-off deals to a predictable
+          subscription, we help young travelers build a life where “Where are
+          you flying next?” is a monthly question.
+        </p>
+      </div>
+      <div class="card">
+        <h3>Brand &amp; product notes</h3>
+        <p style="font-size:0.9rem;">
+          • Brand: calm, reliable, modern travel<br />
+          • Target: students &amp; early-career professionals<br />
+          • Model: B2C subscription with B2B airline/hotel partnerships<br />
+          • This site: front-end only, ready for integration with Stripe,
+          booking APIs, etc.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="container">
+      <h2>Join the waitlist</h2>
+      <p>
+        Use this section in your portfolio to collect fake/demo leads or just
+        to show how sign-up would look. For a live product, you’d connect it
+        to a form tool (e.g. Google Forms, Airtable, Typeform, etc.).
+      </p>
+
+      <div class="contact-card">
+        <form onsubmit="event.preventDefault(); alert('Demo only: connect to a real form service for production.');">
+          <label style="font-size:0.9rem; font-weight:600; display:block; margin-bottom:4px;">Email</label>
+          <input type="email" required placeholder="you@example.com"
+                 style="width:100%; padding:10px 12px; border-radius:10px; border:1px solid rgba(0,0,0,0.12); margin-bottom:10px; font-size:0.9rem;" />
+
+          <label style="font-size:0.9rem; font-weight:600; display:block; margin-bottom:4px;">Which plan are you curious about?</label>
+          <select style="width:100%; padding:9px 12px; border-radius:10px; border:1px solid rgba(0,0,0,0.12); margin-bottom:10px; font-size:0.9rem;">
+            <option>Basic Loop</option>
+            <option>Standard Loop</option>
+            <option>Premium Loop</option>
+            <option>Not sure yet</option>
+          </select>
+
+          <label style="font-size:0.9rem; font-weight:600; display:block; margin-bottom:4px;">Anything else?</label>
+          <textarea rows="3" placeholder="Share how you usually travel or what you’d want from a subscription."
+                    style="width:100%; padding:10px 12px; border-radius:10px; border:1px solid rgba(0,0,0,0.12); font-size:0.9rem;"></textarea>
+
+          <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+            <button type="submit" class="btn-primary">Join waitlist (demo)</button>
+            <span style="font-size:0.8rem; color:var(--muted);">
+              No spam. This is a concept project.
+            </span>
+          </div>
+        </form>
+
+        <div class="contact-info">
+          <div>
+            <span>Email</span>
+            <strong>support@flyloop.com</strong>
+          </div>
+          <div>
+            <span>Instagram</span>
+            <strong>@flyloop</strong>
+          </div>
+          <div>
+            <span>Base city</span>
+            <strong>Toronto, Canada</strong>
+          </div>
+        </div>
+
+        <p class="contact-note">
+          Replace these details with your real contact info when you’re ready
+          to share this with the world.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container footer-row">
+      <div>© 2025 FlyLoop. Concept website for portfolio/demo.</div>
+      <div class="footer-links">
+        <a href="#hero">Back to top</a>
+        <a href="#pricing">Plans</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile nav toggle
+    const navToggle = document.getElementById("navToggle");
+    const navLinks = document.getElementById("navLinks");
+
+    navToggle.addEventListener("click", () => {
+      navLinks.classList.toggle("open");
+    });
+
+    // Close nav when clicking a link (mobile)
+    navLinks.querySelectorAll("a").forEach(a => {
+      a.addEventListener("click", () => navLinks.classList.remove("open"));
+    });
+  </script>
+</body>
+</html>
